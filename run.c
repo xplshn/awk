@@ -795,7 +795,7 @@ int runetochar(char *str, int c)
 
 Cell *matchop(Node **a, int n)	/* ~ and match() */
 {
-	Cell *x, *y;
+	Cell *x, *y, *z;
 	char *s, *t;
 	int i;
 	int cstart, cpatlen, len;
@@ -817,7 +817,7 @@ Cell *matchop(Node **a, int n)	/* ~ and match() */
 		i = (*mf)(pfa, s);
 		tempfree(y);
 	}
-	tempfree(x);
+	z = x;
 	if (n == MATCHFCN) {
 		int start = patbeg - s + 1; /* origin 1 */
 		if (patlen < 0) {
@@ -839,11 +839,13 @@ Cell *matchop(Node **a, int n)	/* ~ and match() */
 		x = gettemp();
 		x->tval = NUM;
 		x->fval = start;
-		return x;
 	} else if ((n == MATCH && i == 1) || (n == NOTMATCH && i == 0))
-		return(True);
+		x = True;
 	else
-		return(False);
+		x = False;
+
+	tempfree(z);
+	return x;
 }
 
 
@@ -1298,7 +1300,8 @@ int format(char **pbuf, int *pbufsize, const char *s, Node *a)	/* printf-like co
 
 						if (bs == NULL)	{ // invalid character
 							// use unicode invalid character, 0xFFFD
-							bs = "\357\277\275";
+							static char invalid_char[] = "\357\277\275";
+							bs = invalid_char;
 							count = 3;
 						}
 						t = bs;
@@ -2446,7 +2449,7 @@ Cell *dosub(Node **a, int subop)        /* sub and gsub */
 	start = getsval(x);
 	while (pmatch(pfa, start)) {
 		if (buf == NULL) {
-			if ((pb = buf = malloc(bufsz)) == NULL)
+			if ((pb = buf = (char *) malloc(bufsz)) == NULL)
 				FATAL("out of memory in dosub");
 			tempstat = pfa->initstat;
 			pfa->initstat = 2;
