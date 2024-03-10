@@ -32,6 +32,7 @@ const char	*version = "version 20240122";
 #include <string.h>
 #include <signal.h>
 #include "awk.h"
+#include "man_page.h"
 
 extern	char	**environ;
 extern	int	nfields;
@@ -111,6 +112,29 @@ getarg(int *argc, char ***argv, const char *msg)
 	}
 }
 
+
+
+// Xplshn's enhancement
+int is_pager_set(void) {
+    const char* pager = getenv("PAGER");
+    return pager != NULL && strlen(pager) > 0;
+}
+
+void execute_pager(const char* pager, const char* man_page_content) {
+    char command[256];
+    snprintf(command, sizeof(command), "%s", pager);
+    FILE* pipe = popen(command, "w");
+    if (pipe == NULL) {
+        fprintf(stderr, "Failed to open pipe to pager.\n");
+        return;
+    }
+    fputs(man_page_content, pipe);
+    pclose(pipe);
+}
+// End of Xplshn's enhancement
+
+
+
 int main(int argc, char *argv[])
 {
 	const char *fs = NULL;
@@ -150,6 +174,19 @@ int main(int argc, char *argv[])
 			printf("awk %s\n", version);
 			return 0;
 		}
+		// Xplshn's enhancement
+		if (strcmp(argv[1], "-help") == 0 || strcmp(argv[1], "--help") == 0) {
+			if (is_pager_set()) {
+						// Use the pager specified in the PAGER environment variable
+						const char* pager = getenv("PAGER");
+						execute_pager(pager, man_page_content);
+					} else {
+						// If no pager is set, just print the man page content to STDOUT
+						printf("%s", man_page_content);
+					}
+				return 0;
+			}
+		// End of the other part of Xplshn's enhancement
 		if (strcmp(argv[1], "--") == 0) {	/* explicit end of args */
 			argc--;
 			argv++;

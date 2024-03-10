@@ -1,0 +1,8 @@
+#!/bin/sh
+pandoc -s -f man -t plain -o awk.1.txt awk.1 && \
+cat > ./man_page.c << 'EOF_man_page' && \
+#include "man_page.h"
+
+EOF_man_page
+xxd -i onetrueawk.1.txt >> man_page.c && \
+echo "const char* man_page_content = (char*)onetrueawk_1_txt;" >> ./man_page.c
