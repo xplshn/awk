@@ -24,15 +24,15 @@
 
 CFLAGS = -fsanitize=address -O1 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls
 CFLAGS = -g
-CFLAGS =
 CFLAGS = -O2 -static
 LDFLAGS += -static -L/usr/lib/x86_64-linux-musl/libc.a
+
 
 # compiler options
 #CC = cc -Wall -g -Wwrite-strings
 #CC = cc -O4 -Wall -pedantic -fno-strict-aliasing
 #CC = cc -fprofile-arcs -ftest-coverage # then gcov f1.c; cat f1.c.gcov
-HOSTCC = cc -g -Wall -pedantic -Wcast-qual # It'd be best to use clang, but, whatever...
+#HOSTCC = cc -g -Wall -pedantic -Wcast-qual # It'd be best to use clang, but, whatever...
 CC = $(HOSTCC)  # change this is cross-compiling.
 
 # By fiat, to make our lives easier, yacc is now defined to be bison.
