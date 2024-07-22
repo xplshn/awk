@@ -50,7 +50,7 @@ case "$1" in
     require "${CC:=cc}" ; require make ; require bison
     log "Using make to build \"$(basename "$BASE")\""
     make -j"$(nproc)" || log_error "Make command failed" && {
-        mv ./a.out ./awk && log "Build process completed"
+        mv ./a.out ./awk
     }
     ;;
 "clean")
