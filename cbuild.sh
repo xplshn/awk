@@ -66,10 +66,14 @@ while [ $# -gt 0 ] || [ "$1" = "" ]; do
         ;;
     "retrieve")
         shift
-        [ ! -x "./a.out" ] && {
+        if [ -x "./a.out" ]; then
+            if [ ! -e "./awk" ]; then
+                mv ./a.out ./awk
+            fi
+        elif [ ! -e "./awk" ]; then
             log "$R" "\"${BASE##*/}\" was never compiled OR it was but its binaries weren't found anyways."
             exit 1
-        } && mv ./a.out ./awk
+        fi
         readlink -f ./awk
         exit 0
         ;;
