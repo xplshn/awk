@@ -48,14 +48,6 @@ build() {
 # Argument processing
 while [ $# -gt 0 ] || [ "$1" = "" ]; do
     case "$1" in
-    "install")
-        shift
-        build && {
-            run mkdir -p "$DESTDIR$PREFIX/bin/" &&
-                run cp -f vi "$DESTDIR$PREFIX/bin/vi" &&
-                [ -x "$DESTDIR$PREFIX/bin/vi" ] && log "$G" "\"${BASE##*/}\" has been install to $DESTDIR$PREFIX/bin/vi" || log "$R" "Couldn't finish installation"
-        } && exit 0 || exit 1
-        ;;
     "" | "build")
         # If the user doesn't use "build" explicitely, do not run the build step again.
         [ "$1" = "build" ] || {
@@ -69,7 +61,7 @@ while [ $# -gt 0 ] || [ "$1" = "" ]; do
         ;;
     "clean")
         shift
-        run rm ./vi ./nextvi 2>/dev/null
+        run rm ./a.out ./awk 2>/dev/null
         exit 0
         ;;
     "retrieve")
@@ -82,7 +74,7 @@ while [ $# -gt 0 ] || [ "$1" = "" ]; do
         exit 0
         ;;
     *)
-        echo "Usage: $0 {install|pgobuild|build|debug|clean}"
+        echo "Usage: $0 {build|clean}"
         exit 1
         ;;
     esac
