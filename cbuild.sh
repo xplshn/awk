@@ -62,7 +62,7 @@ while [ $# -gt 0 ] || [ "$1" = "" ]; do
             explicit="1"
         } && [ -n "$1" ] && shift
         if [ "$explicit" = "1" ]; then
-            [ -f ./vi ] || [ -f ./nextvi ] && log "$R" "Nothing to do; \"${BASE##*/}\" was already compiled" && exit 0
+            [ -f ./a.out ] || [ -f ./awk ] && log "$R" "Nothing to do; \"${BASE##*/}\" was already compiled" && exit 0
         fi
         # Start build process
         build && exit 0 || exit 1
