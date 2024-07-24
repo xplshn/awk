@@ -39,7 +39,7 @@ build() {
     require "make"
     require "${CC}"
     log "$G" "Entering step: \"Build \"${BASE##*/}\" using \"$CC\""
-    run "make" || {
+    make -j"$(nproc)" || {
         log "$R" "Failed during step: \"Build \"${BASE##*/}\" using \"$CC\""
         exit 1
     }
